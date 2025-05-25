@@ -32,7 +32,7 @@ namespace Grelka.Server.Controllers
         public async Task<IActionResult> Get([FromQuery] Guid id)
         {
             var result = await _db.Products.FindAsync(id);
-            if(result == null)
+            if (result == null)
             {
                 return NotFound($"Product with id {id} not found");
             }
@@ -104,8 +104,8 @@ namespace Grelka.Server.Controllers
             }
             if (!string.IsNullOrWhiteSpace(size))
             {
-                products = products.Where(p =>
-                size.Contains(p.Presence!)).ToList();
+                // products = products.Where(p =>
+                // size.Contains(p.Presence!)).ToList();
             }
             if (!string.IsNullOrWhiteSpace(sex))
             {
@@ -128,6 +128,16 @@ namespace Grelka.Server.Controllers
             {
                 return NotFound("No products found");
             }
+            return Ok(products);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Find([FromQuery] string str)
+        {
+            if (str.IsNullOrEmpty())
+            {
+                return BadRequest("Empty string");
+            }
+            var products = await _db.Products.Where(p => p.Brand.Contains(str) || p.Name.Contains(str)).ToListAsync();
             return Ok(products);
         }
     }

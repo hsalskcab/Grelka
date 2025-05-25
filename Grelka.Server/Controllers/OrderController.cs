@@ -32,7 +32,7 @@ namespace Grelka.Server.Controllers
         public async Task<IActionResult> Get([FromQuery] Guid id)
         {
             var result = await _db.Orders.FindAsync(id);
-            if(result == null)
+            if (result == null)
             {
                 return NotFound($"Order with id {id} not found");
             }
