@@ -1,0 +1,1 @@
+export { useHeroSlider } from './useHeroSlider';

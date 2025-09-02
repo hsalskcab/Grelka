@@ -1,0 +1,61 @@
+.container {
+  width: 100%;
+  position: relative;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: calc(50% + 2px); /* Сдвигаем на 4px вниз (50% + 2px) */
+  transform: translateY(-50%);
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+
+.input {
+  padding-left: 40px;
+  transition: padding-left 0.2s ease;
+  border: 1px solid var(--color-dark2) !important; /* Фиксированный цвет бордера */
+  background-color: var(--color-dark1);
+  color: var(--color-white);
+  border-radius: 8px;
+}
+
+.input:focus {
+  border-color: var(--color-dark2) !important; /* Та же цвет при фокусе */
+  outline: none;
+  box-shadow: none; /* Убираем свечение */
+}
+
+.input.withIcon {
+  padding-left: 40px;
+}
+
+.input:not(.withIcon) {
+  padding-left: 16px;
+}
+
+.clearButton {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) translateY(2px); /* Опускаем на 3px вниз */
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.clearButton:hover {
+  opacity: 1;
+}

@@ -1,0 +1,103 @@
+.megaMenu {
+  background-color: var(--color-dark);
+  padding: 24px 0; /* Убираем боковые отступы */
+  margin-top: 20px;
+  border-radius: 20px;
+  border: 1px solid var(--color-dark2);
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Контейнер для центрирования содержимого */
+.megaMenuContent {
+  max-width: 1200px; /* Максимальная ширина контента */
+  margin: 0 auto; /* Центрирование по горизонтали */
+  padding: 0 100px; /* Отступы по бокам для маленьких экранов */
+  box-sizing: border-box;
+}
+
+.title {
+  margin: 0 0 30px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-grey);
+  text-align: left; /* Выравнивание заголовка по левому краю внутри центрированного контейнера */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--color-whyte);
+  text-decoration: none;
+  text-align: left; /* Выравнивание заголовков групп */
+}
+
+.groupTitle:hover {
+  text-decoration: underline;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.link {
+  color: var(--color-whyte);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 200;
+  text-align: left; /* Выравнивание ссылок */
+}
+
+.link:hover {
+  color: var(--color-grey);
+}
+
+.seeAll {
+  position: absolute;
+  bottom: 20px;
+  right: 20px; /* Учитываем padding контейнера */
+}
+
+.seeAllLink {
+  color: var(--color-grey2);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.seeAllLink:hover {
+  color: var(--color-whyte);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .megaMenuContent {
+    padding: 0 15px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки на мобильных */
+    gap: 15px;
+  }
+  
+  .seeAll {
+    position: static; /* Убираем абсолютное позиционирование на мобильных */
+    margin-top: 20px;
+    text-align: center; /* Центрируем кнопку на мобильных */
+  }
+}

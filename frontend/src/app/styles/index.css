@@ -1,0 +1,154 @@
+/* Подключение шрифтов */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Нормализация и сброс стилей */
+* {
+  box-sizing: border-box;
+}
+
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b, u, i, center,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+
+/* Кастомные CSS переменные (ваши цвета) */
+:root {
+  --color-dark: #1A1A1A;
+  --color-dark1: #212121;
+  --color-dark2: #2B2B2B;
+  --color-grey: #4A4A4A;
+  --color-grey2: #7F7F7F;
+  --color-white: #ECECEC;
+  --color-blue: #293E6D;
+
+  /* Дополнительные переменные */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+}
+
+/* Базовые стили */
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-white);
+  background-color: var(--color-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Дополнительные утилитарные классы */
+.text-center {
+  text-align: center;
+}
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+/* Стили для ссылок */
+a {
+  color: var(--color-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: color-mix(in srgb, var(--color-blue) 80%, white);
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+/* Базовый контейнер для ЛЮБОГО контента - ИСПРАВЛЕННЫЙ ВАРИАНТ */
+.container {
+  max-width: 1240px; /* 1200px + 20px + 20px */
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* Внутренний контент будет ровно 1200px */
+.container > * {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Обертка для основного контента страницы */
+.app-content {
+  margin-left: 78px;
+  width: calc(100% - 78px);
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  padding-top: 60px; /* ← ДОБАВЛЯЕМ ОТСТУП СВЕРХУ ДЛЯ HEADER */
+}
+
+/* Контейнер для основного контента */
+.main-content-container {
+  padding-top: 60px; /* Дополнительный отступ внутри контейнера */
+}
+
+/* Обертка для header/footer */
+.header-wrapper,
+.footer-wrapper {
+  width: calc(100% - 78px);
+  margin-left: 78px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .app-content,
+  .header-wrapper,
+  .footer-wrapper {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .container {
+    padding: 0 16px;
+    max-width: 100%; /* На мобилках растягиваем на всю ширину */
+  }
+  
+  /* На мобилках убираем ограничение для внутреннего контента */
+  .container > * {
+    max-width: 100%;
+  }
+  
+  .app-content {
+    padding: 16px 0 20px 0; /* 50px сверху для мобильного header */
+  }
+}
+
+/* Дополнительно: убираем скролл по горизонтали для всего сайта */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}

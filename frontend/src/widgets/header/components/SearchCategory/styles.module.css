@@ -1,0 +1,61 @@
+/* styles.module.css для SearchCategory - исправленная версия */
+.category {
+  margin-bottom: 35px;
+  flex-shrink: 0;
+}
+
+.category:last-child {
+  margin-bottom: 0;
+}
+
+.categoryTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-white);
+  text-align: left;
+  margin: 35px 0 35px 0;
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Первая категория без верхнего отступа */
+.category:first-child .categoryTitle {
+  margin-top: 0;
+}
+
+.itemsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin: 0;
+  margin-left: 18px;
+  padding: 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.itemLink {
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  margin-right: 18px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.itemLink:last-child {
+  margin-right: 0;
+}
+
+.itemLink:hover {
+  color: var(--color-grey2);
+}
+
+.itemLink:focus {
+  color: var(--color-grey2);
+}

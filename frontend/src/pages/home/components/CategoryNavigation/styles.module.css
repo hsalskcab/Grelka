@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+  display: block; /* Меняем с inline-block на block */
+  width: 100%; /* Занимает всю доступную ширину */
+}
+
+.buttonsWrapper {
+  display: flex;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; /* Важно: растягиваем на всю ширину контейнера */
+  z-index: 1000;
+}
