@@ -1,50 +1,53 @@
 ﻿using Grelka.Server.DbContexts;
 using Grelka.Server.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 
 namespace Grelka.Server.Controllers
 {
-    public class UserController : Controller
+    public class UserController : Controller    //TODO: login, register
     {
+        private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _db;
-        public UserController(AppDbContext db)
+        public UserController(ILogger<HomeController> logger, AppDbContext db)
         {
+            _logger = logger;
             _db = db;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _db.Users.ToListAsync();
-            if (list == null || !list.Any())
+            var list = await _db.Users.ToListAsync<User>();
+            if (list.IsNullOrEmpty())
             {
-                return NotFound("No users found.");
+                return NotFound("No Users found.");
             }
             return Ok(list);
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] Guid id)
         {
-            var user = await _db.Users.FindAsync(id);
-            if (user == null)
+            var result = await _db.Users.FindAsync(id);
+            if (result == null)
             {
                 return NotFound($"User with id {id} not found");
             }
-            return Ok(user);
+            return Ok(result);
         }
-
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] User user)
+        public async Task<IActionResult> Update([FromBody] User User)
         {
-            if (user == null)
+            if (User == null)
             {
                 return BadRequest("User is null");
             }
             try
             {
-                _db.Users.Update(user);
+                _db.Users.Update(User);
                 await _db.SaveChangesAsync();
                 return Ok();
             }
@@ -53,37 +56,35 @@ namespace Grelka.Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] User user)
+        public async Task<IActionResult> Create([FromBody] User User)
         {
-            if (user == null)
+            if (User == null)
             {
-                return BadRequest("Null user");
+                return BadRequest("Null User");
             }
             try
             {
-                await _db.Users.AddAsync(user);
+                await _db.Users.AddAsync(User);
                 await _db.SaveChangesAsync();
-                return Ok(user);
+                return Ok();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] Guid id)
         {
-            var user = await _db.Users.FindAsync(id);
-            if (user == null)
+            var item = await _db.FindAsync<User>(id);
+            if (item == null)
             {
-                return NotFound($"User with id {id} not found");
+                return BadRequest("Null id");
             }
             try
             {
-                _db.Users.Remove(user);
+                _db.Users.Remove(item);
                 await _db.SaveChangesAsync();
                 return Ok();
             }

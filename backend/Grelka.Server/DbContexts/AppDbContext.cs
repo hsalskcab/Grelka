@@ -27,6 +27,8 @@ namespace Grelka.Server.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureProductModel(modelBuilder);
+            ConfigureUserModel(modelBuilder);
+            ConfigureOrderModel(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -87,6 +89,43 @@ namespace Grelka.Server.DbContexts
 
                 entity.Property(p => p.OrderedProductsId)
                     .IsRequired();
+            });
+        }
+        private void ConfigureUserModel(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Email)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(p => p.Username)
+                    .HasMaxLength(50)
+                    .HasColumnType("decimal(18, 2)")
+                    .IsRequired();
+
+                entity.Property(p => p.UserType)
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(p => p.LikedProducts)
+                    .IsRequired();
+
+                entity.Property(p => p.Bdate)
+                    .IsRequired();
+
+                entity.Property(p => p.Icon)
+                    .IsRequired();
+
+                entity.Property(p => p.Password)
+                    .HasMaxLength(30)
+                    .IsRequired();
+
+                entity.Property(p => p.Orders)
+                    .IsRequired();
+
             });
         }
         public class DateOnlyConverter : ValueConverter<DateOnly, DateTime>
