@@ -1,8 +1,22 @@
+using Grelka.Server.DbContexts;
 using Grelka.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.ComponentModel;
+
+
+public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+{
+    public AppDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=ktoktokto");
+
+        return new AppDbContext(optionsBuilder.Options);
+    }
+}
 
 namespace Grelka.Server.DbContexts
 {
@@ -13,16 +27,16 @@ namespace Grelka.Server.DbContexts
         public DbSet<Order> Orders { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
 
         //public object Products { get; internal set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=ktoktokto");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=ktoktokto");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -103,7 +117,6 @@ namespace Grelka.Server.DbContexts
 
                 entity.Property(p => p.Username)
                     .HasMaxLength(50)
-                    .HasColumnType("decimal(18, 2)")
                     .IsRequired();
 
                 entity.Property(p => p.UserType)

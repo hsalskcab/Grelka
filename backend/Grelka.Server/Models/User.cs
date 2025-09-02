@@ -9,7 +9,7 @@
         public string?       Password { get; set; }
         public string?       UserType { get; set; }
         public string?       Icon { get; set; }
-        public List<Order>   Orders { get; set; }
-        public List<Product> LikedProducts { get; set; }
+        public List<Guid>   Orders { get; set; }
+        public List<Guid> LikedProducts { get; set; }
     }
 }
