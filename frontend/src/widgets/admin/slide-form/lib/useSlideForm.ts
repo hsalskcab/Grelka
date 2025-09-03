@@ -8,6 +8,16 @@ interface UseSlideFormProps {
   onCancel?: () => void;
 }
 
+// Функция конвертации файла в Base64
+const convertToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
 export const useSlideForm = ({ slide, onSuccess, onCancel }: UseSlideFormProps) => {
   const [formData, setFormData] = useState({
     title: slide?.title || '',
@@ -46,25 +56,42 @@ export const useSlideForm = ({ slide, onSuccess, onCancel }: UseSlideFormProps) 
     setError('');
 
     try {
+      let imageUrl = slide?.image || '';
+      
+      // Конвертируем изображение в Base64 если есть новый файл
+      if (imageFile) {
+        try {
+          imageUrl = await convertToBase64(imageFile);
+          console.log('Изображение конвертировано в Base64');
+        } catch (convertError) {
+          console.error('Ошибка конвертации изображения:', convertError);
+          setError('Ошибка обработки изображения');
+          return;
+        }
+      }
+
       const slideData: CreateSlideDto | UpdateSlideDto = {
         ...formData,
-        image: imageFile ? URL.createObjectURL(imageFile) : slide?.image || '',
+        image: imageUrl // Сохраняем как Base64 строку
       };
 
-      console.log('Отправляемые данные:', JSON.stringify(slideData, null, 2)); // ← Подробный вывод
+      console.log('Отправляемые данные:', {
+        ...slideData,
+        image: imageUrl ? 'Base64 data (скрыто)' : 'Пусто'
+      });
 
       if (slide) {
-        const response = await slidesApi.update(slide.id, slideData);
-        console.log('Update response:', response);
+        // Редактирование существующего слайда
+        await slidesApi.update(slide.id, slideData);
       } else {
-        const response = await slidesApi.create(slideData as CreateSlideDto);
-        console.log('Create response:', response);
+        // Создание нового слайда
+        await slidesApi.create(slideData as CreateSlideDto);
       }
 
       onSuccess?.();
     } catch (err: any) {
-      console.error('Slide save error details:', err);
-      console.error('Error response:', err.response?.data); // ← Данные ошибки
+      console.error('Ошибка при сохранении слайда:', err);
+      console.error('Детали ошибки:', err.response?.data);
       setError('Ошибка при сохранении слайда: ' + (err.response?.data?.message || err.message));
     } finally {
       setIsLoading(false);

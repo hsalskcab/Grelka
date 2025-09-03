@@ -50,11 +50,11 @@ export const HeroSlider: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className={styles.slider}>Загрузка слайдов...</div>;
+    return <div className={styles.slider}></div>; // Пустой div с классом slider
   }
 
   if (slides.length === 0) {
-    return <div className={styles.slider}>Нет активных слайдов</div>;
+    return <div className={styles.slider}></div>; // Пустой div с классом slider
   }
 
   return (

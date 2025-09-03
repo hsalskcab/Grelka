@@ -1,7 +1,14 @@
 .container {
   position: relative;
-  display: block; /* Меняем с inline-block на block */
-  width: 100%; /* Занимает всю доступную ширину */
+  display: block;
+  width: 100%;
+}
+
+/* Скрываем компонент на мобильных устройствах */
+@media (max-width: 768px) {
+  .container {
+    display: none;
+  }
 }
 
 .buttonsWrapper {
@@ -12,6 +19,6 @@
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%; /* Важно: растягиваем на всю ширину контейнера */
+  width: 100%;
   z-index: 1000;
 }
