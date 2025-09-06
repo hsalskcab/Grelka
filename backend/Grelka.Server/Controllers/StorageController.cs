@@ -19,15 +19,26 @@ namespace Grelka.Server.Controllers
             _db = db;
         }
         [HttpGet]
-        public IActionResult GetSlides()
+        public IActionResult GetSlides([FromQuery] uint index)
         {
-            string filePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "cloud", "slide-3.webp");
+            string filePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "cloud", "slide-" + index.ToString() + ".webp");
+
+            var files = Directory.GetFiles(filePath)
+                                 .Select(Path.GetFileName)
+                                 .ToList();
+
             var bytes = System.IO.File.ReadAllBytes(filePath);
             return File(bytes, "image/webp");
         }
 
+        [HttpGet]
+        public Task<IActionResult> GetProductPics(Guid id)
+        {
+            return Ok();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> UploadWebpFile(IFormFile file)
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Null file.");
@@ -46,6 +57,5 @@ namespace Grelka.Server.Controllers
 
             return Ok();
         }
-
     }
 }
