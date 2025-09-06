@@ -11,9 +11,9 @@ namespace Grelka.Server.Controllers
 {
     public class UserController : Controller    //TODO: login, register
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly AppDbContext _db;
-        public UserController(ILogger<HomeController> logger, AppDbContext db)
+        public UserController(ILogger<UserController> logger, AppDbContext db)
         {
             _logger = logger;
             _db = db;

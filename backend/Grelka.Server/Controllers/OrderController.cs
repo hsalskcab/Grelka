@@ -11,9 +11,9 @@ namespace Grelka.Server.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<OrderController> _logger;
         private readonly AppDbContext _db;
-        public OrderController(ILogger<HomeController> logger, AppDbContext db)
+        public OrderController(ILogger<OrderController> logger, AppDbContext db)
         {
             _logger = logger;
             _db = db;

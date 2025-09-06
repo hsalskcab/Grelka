@@ -11,9 +11,9 @@ namespace Grelka.Server.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ProductController> _logger;
         private readonly AppDbContext _db;
-        public ProductController(ILogger<HomeController> logger, AppDbContext db)
+        public ProductController(ILogger<ProductController> logger, AppDbContext db)
         {
             _logger = logger;
             _db = db;
@@ -32,7 +32,7 @@ namespace Grelka.Server.Controllers
         public async Task<IActionResult> Get([FromQuery] Guid id)
         {
             var result = await _db.Products.FindAsync(id);
-            if(result == null)
+            if (result == null)
             {
                 return NotFound($"Product with id {id} not found");
             }
