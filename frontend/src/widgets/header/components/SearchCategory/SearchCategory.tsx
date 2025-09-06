@@ -1,7 +1,7 @@
 import { SearchResult } from '../../lib/types/search';
 import styles from './styles.module.css';
 
-interface SearchCategoryProps {
+export interface SearchCategoryProps {
   title: string;
   items: SearchResult[];
   onItemClick: (item: SearchResult) => void;

@@ -1,0 +1,76 @@
+.videoCard {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #000;
+}
+
+.videoCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.videoCard.selected {
+  z-index: 10;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.7));
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.videoCard:hover .overlay {
+  opacity: 1;
+}
+
+.sellerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sellerIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sellerName {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.fullscreenButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.fullscreenButton:hover {
+  background: rgba(0, 0, 0, 0.7);
+}

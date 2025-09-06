@@ -1,29 +1,27 @@
+// layout.tsx
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import { AdminSidebar } from '../../widgets/admin/sidebar';
+import { Outlet, useLocation } from 'react-router-dom';
 import { AdminHeader } from '../../widgets/admin/header';
 import styles from './layout.module.css';
 
 export const AdminLayout = () => {
-  // Скрываем основной хедер и навбар для админки
+  const location = useLocation();
+  const isLoginPage = location.pathname.includes('/login');
+
+  // Скрываем основной хедер и навбар для всей админки
   useEffect(() => {
     const header = document.querySelector('header');
-    const navbar = document.querySelector('nav');
-    
     if (header) header.style.display = 'none';
-    if (navbar) navbar.style.display = 'none';
     
     return () => {
       if (header) header.style.display = '';
-      if (navbar) navbar.style.display = '';
     };
   }, []);
 
   return (
     <div className={styles.adminLayout}>
-      <AdminSidebar />
       <main className={styles.mainContent}>
-        <AdminHeader />
+        {!isLoginPage && <AdminHeader />}
         <div className={styles.content}>
           <Outlet />
         </div>

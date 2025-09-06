@@ -2,7 +2,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { useMediaQuery } from '@/shared/lib/hooks/useMediaQuery';
+import { useMediaQuery } from '@/shared/hooks/useMediaQuery';
 import { DesktopHeader } from './components/DesktopHeader';
 import { useSearch } from './hooks/useSearch';
 import styles from './styles.module.css';

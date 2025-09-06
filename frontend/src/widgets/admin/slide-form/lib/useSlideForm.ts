@@ -1,111 +1,78 @@
-import { useState } from 'react';
-import { Slide, CreateSlideDto, UpdateSlideDto } from '@/shared/api/mockapi/slides/types';
-import { slidesApi } from '@/shared/api/mockapi/slides';
+// 📋 ОПИСАНИЕ: Хук для формы слайдов
+// 🔧 ИЗМЕНЕНИЯ: Замена Base64 на реальную загрузку изображений
 
-interface UseSlideFormProps {
-  slide?: Slide;
-  onSuccess?: () => void;
-  onCancel?: () => void;
+import { useState } from 'react';
+import { uploadApi } from '@/shared/api/real'; // ← ИЗМЕНИТЬ импорт
+
+interface SlideFormData {
+  title?: string;
+  description?: string;
+  link?: string;
+  imageUrl?: string;
+  isActive?: boolean;
+  order?: number;
 }
 
-// Функция конвертации файла в Base64
-const convertToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = error => reject(error);
+export const useSlideForm = (initialData?: SlideFormData) => {
+  const [formData, setFormData] = useState<SlideFormData>(initialData || {
+    title: '',
+    description: '',
+    link: '',
+    imageUrl: '',
+    isActive: true,
+    order: 0
   });
-};
+  
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export const useSlideForm = ({ slide, onSuccess, onCancel }: UseSlideFormProps) => {
-  const [formData, setFormData] = useState({
-    title: slide?.title || '',
-    description: slide?.description || '',
-    link: slide?.link || '',
-    isActive: slide?.isActive ?? true,
-    order: slide?.order || 0,
-  });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    
-    if (type === 'checkbox') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: (e.target as HTMLInputElement).checked
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+  const updateField = (field: string, value: any) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = (file: File) => {
-    setImageFile(file);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
+  const uploadImage = async (file: File): Promise<boolean> => {
     try {
-      let imageUrl = slide?.image || '';
-      
-      // Конвертируем изображение в Base64 если есть новый файл
-      if (imageFile) {
-        try {
-          imageUrl = await convertToBase64(imageFile);
-          console.log('Изображение конвертировано в Base64');
-        } catch (convertError) {
-          console.error('Ошибка конвертации изображения:', convertError);
-          setError('Ошибка обработки изображения');
-          return;
-        }
-      }
+      setIsUploading(true);
+      setUploadProgress(0);
+      setError(null);
 
-      const slideData: CreateSlideDto | UpdateSlideDto = {
-        ...formData,
-        image: imageUrl // Сохраняем как Base64 строку
-      };
-
-      console.log('Отправляемые данные:', {
-        ...slideData,
-        image: imageUrl ? 'Base64 data (скрыто)' : 'Пусто'
+      // 🎯 РЕАЛЬНАЯ ЗАГРУЗКА изображения
+      const response = await uploadApi.uploadFile(file, 'image', (progress) => {
+        setUploadProgress(progress);
       });
 
-      if (slide) {
-        // Редактирование существующего слайда
-        await slidesApi.update(slide.id, slideData);
-      } else {
-        // Создание нового слайда
-        await slidesApi.create(slideData as CreateSlideDto);
-      }
-
-      onSuccess?.();
+      updateField('imageUrl', response.url);
+      setIsUploading(false);
+      return true;
+      
     } catch (err: any) {
-      console.error('Ошибка при сохранении слайда:', err);
-      console.error('Детали ошибки:', err.response?.data);
-      setError('Ошибка при сохранении слайда: ' + (err.response?.data?.message || err.message));
-    } finally {
-      setIsLoading(false);
+      setError(err.response?.data?.message || 'Ошибка загрузки изображения');
+      setIsUploading(false);
+      return false;
     }
+  };
+
+  const removeImage = async (): Promise<void> => {
+    if (formData.imageUrl) {
+      try {
+        await uploadApi.deleteFile(formData.imageUrl);
+      } catch (err) {
+        console.error('Ошибка удаления изображения:', err);
+      }
+    }
+    updateField('imageUrl', '');
+    setError(null);
   };
 
   return {
     formData,
-    imageFile,
-    isLoading,
+    uploadProgress,
+    isUploading,
     error,
-    handleInputChange,
-    handleImageUpload,
-    handleSubmit,
-    onCancel
+    updateField,
+    uploadImage,
+    removeImage,
+    setFormData
   };
 };

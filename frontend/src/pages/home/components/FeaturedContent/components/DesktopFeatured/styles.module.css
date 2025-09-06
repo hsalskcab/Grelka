@@ -1,0 +1,11 @@
+.desktopFeatured {
+  width: 100%;
+}
+
+.videosGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  height: 600px;
+}

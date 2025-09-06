@@ -8,13 +8,13 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading } = useAdminAuth();
+  const { user, loading } = useAdminAuth(); // ← Используем реальные поля из хука
 
-  if (isLoading) {
+  if (loading) {
     return <Loader />;
   }
 
-  if (!isAuthenticated) {
+  if (!user) { // ← Проверяем наличие пользователя вместо isAuthenticated
     return <Navigate to="/admin/login" replace />;
   }
 

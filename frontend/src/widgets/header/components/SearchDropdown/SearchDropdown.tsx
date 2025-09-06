@@ -3,7 +3,7 @@ import { SearchCategory as SearchCategoryType, PopularQuery, SearchResult } from
 import { SearchCategory } from '../SearchCategory';
 import styles from './styles.module.css';
 
-interface SearchDropdownProps {
+export interface SearchDropdownProps {
   query: string;
   searchResults: SearchCategoryType[];
   popularQueries: PopularQuery[];

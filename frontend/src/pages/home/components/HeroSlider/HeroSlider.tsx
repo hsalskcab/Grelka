@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHeroSlider } from './hooks';
 import { Slide } from './components/Slide';
 import { SliderControls } from './components/SlideControls';
-import { slidesApi } from '@/shared/api/mockapi/slides';
+import { slidesApi } from '@/shared/api/real';
+import { Slide as ApiSlide } from '@/shared/api/real/types'; // ← ДОБАВЛЯЕМ импорт типа Slide из API
 import { ISlide } from './lib/types';
 import styles from './styles.module.css';
 
@@ -18,14 +19,15 @@ export const HeroSlider: React.FC = () => {
 
   const loadSlides = async () => {
     try {
-      const data = await slidesApi.getAll();
+      const data = await slidesApi.getSlides(); // ← ИЗМЕНИТЬ getAll
+      
       // Преобразуем данные из API в формат ISlide
       const formattedSlides: ISlide[] = data
         .filter(slide => slide.isActive)
-        .sort((a, b) => a.order - b.order)
-        .map(slide => ({
-          id: slide.id,
-          image: slide.image,
+        .sort((a: ApiSlide, b: ApiSlide) => a.order - b.order) // ← Используем ApiSlide
+        .map((slide: ApiSlide) => ({ // ← Используем ApiSlide
+          id: slide.id.toString(), // ← преобразовать в string
+          image: slide.imageUrl,   // ← ИЗМЕНИТЬ image на imageUrl
           title1: slide.title,
           title2: slide.description,
           url: slide.link
@@ -50,11 +52,11 @@ export const HeroSlider: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className={styles.slider}></div>; // Пустой div с классом slider
+    return <div className={styles.slider}></div>;
   }
 
   if (slides.length === 0) {
-    return <div className={styles.slider}></div>; // Пустой div с классом slider
+    return <div className={styles.slider}></div>;
   }
 
   return (
