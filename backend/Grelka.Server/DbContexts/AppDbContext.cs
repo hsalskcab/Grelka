@@ -43,10 +43,12 @@ namespace Grelka.Server.DbContexts
             ConfigureProductModel(modelBuilder);
             ConfigureUserModel(modelBuilder);
             ConfigureOrderModel(modelBuilder);
+            ConfigureStoragedFileModel(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
-        private void ConfigureProductModel(ModelBuilder modelBuilder) { 
+        private void ConfigureProductModel(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.Id);
@@ -139,6 +141,25 @@ namespace Grelka.Server.DbContexts
                 entity.Property(p => p.Orders)
                     .IsRequired();
 
+            });
+        }
+        private void ConfigureStoragedFileModel(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<StoragedFile>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Name)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(p => p.Path)
+                    .HasMaxLength(500)
+                    .IsRequired();
+
+                entity.Property(p => p.Extension)
+                    .HasMaxLength(30)
+                    .IsRequired();
             });
         }
         public class DateOnlyConverter : ValueConverter<DateOnly, DateTime>
